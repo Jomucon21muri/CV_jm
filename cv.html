@@ -1,0 +1,1371 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JoseM</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-color: #2563eb;
+            --secondary-color: #7c3aed;
+            --accent-color: #06b6d4;
+            --dark-bg: #0f172a;
+            --light-bg: #f8fafc;
+            --text-dark: #1e293b;
+            --text-light: #64748b;
+            --white: #ffffff;
+            --gradient-1: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --gradient-2: linear-gradient(135deg, #2563eb 0%, #7c3aed 100%);
+            --gradient-3: linear-gradient(135deg, #06b6d4 0%, #2563eb 100%);
+            --shadow-sm: 0 1px 3px rgba(0,0,0,0.1);
+            --shadow-md: 0 4px 6px rgba(0,0,0,0.1);
+            --shadow-lg: 0 10px 25px rgba(0,0,0,0.15);
+            --shadow-xl: 0 20px 40px rgba(0,0,0,0.2);
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--text-dark);
+            background: var(--light-bg);
+            overflow-x: hidden;
+        }
+
+        /* Video de fondo fijo */
+        .video-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -2;
+            overflow: hidden;
+        }
+
+        .video-bg video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0.25;
+        }
+
+        /* Animación de fondo */
+        .animated-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: linear-gradient(45deg, #667eea 0%, #764ba2 25%, #f093fb 50%, #4facfe 75%, #667eea 100%);
+            background-size: 400% 400%;
+            animation: gradientShift 15s ease infinite;
+            opacity: 0.5;
+        }
+
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* Header fijo con efecto glassmorphism */
+        header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        header.scrolled {
+            background: rgba(255, 255, 255, 0.95);
+            box-shadow: var(--shadow-md);
+        }
+
+        nav {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            background: var(--gradient-2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: var(--white);
+            font-weight: 500;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        header.scrolled nav a {
+            color: var(--text-dark);
+        }
+
+        nav a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--gradient-2);
+            transition: width 0.3s ease;
+        }
+
+        nav a:hover::after {
+            width: 100%;
+        }
+
+        /* Botón de idioma */
+        .lang-switch {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 0.5rem 1rem;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            color: var(--white);
+            font-weight: 500;
+            font-size: 0.9rem;
+        }
+
+        .lang-switch:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+        }
+
+        header.scrolled .lang-switch {
+            background: var(--gradient-2);
+            color: var(--white);
+            border-color: transparent;
+        }
+
+        header.scrolled .lang-switch:hover {
+            box-shadow: var(--shadow-md);
+        }
+
+        /* Sección Hero */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 2rem;
+            color: var(--white);
+        }
+
+        .hero-content {
+            animation: fadeInUp 1s ease;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .hero h1 {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            font-weight: 700;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .hero h2 {
+            font-size: 2rem;
+            margin-bottom: 2rem;
+            font-weight: 300;
+            opacity: 0.9;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            max-width: 600px;
+            margin: 0 auto 2rem;
+            opacity: 0.85;
+        }
+
+        /* Botones */
+        .btn {
+            display: inline-block;
+            padding: 1rem 2rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: none;
+            font-size: 1rem;
+        }
+
+        .btn-primary {
+            background: var(--white);
+            color: var(--primary-color);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-xl);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--white);
+            border: 2px solid var(--white);
+            margin-left: 1rem;
+        }
+
+        .btn-secondary:hover {
+            background: var(--white);
+            color: var(--primary-color);
+        }
+
+        /* Secciones */
+        section {
+            padding: 5rem 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            text-align: center;
+            margin-bottom: 3rem;
+            position: relative;
+            padding-bottom: 1rem;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 4px;
+            background: var(--gradient-2);
+            border-radius: 2px;
+        }
+
+        /* Cards */
+        .card {
+            background: var(--white);
+            border-radius: 20px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: var(--shadow-md);
+            transition: all 0.3s ease;
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        .card.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-xl);
+        }
+
+        /* Sobre mí */
+        .about-content {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 3rem;
+            align-items: center;
+        }
+
+        .profile-image {
+            width: 100%;
+            max-width: 300px;
+            height: 300px;
+            border-radius: 20px;
+            background: var(--gradient-1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 8rem;
+            color: var(--white);
+            box-shadow: var(--shadow-lg);
+            margin: 0 auto;
+            overflow: hidden;
+        }
+
+        .profile-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* Experiencia y Educación */
+        .timeline-item {
+            position: relative;
+            padding-left: 2rem;
+            margin-bottom: 2rem;
+            border-left: 3px solid var(--primary-color);
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -8px;
+            top: 0;
+            width: 15px;
+            height: 15px;
+            border-radius: 50%;
+            background: var(--primary-color);
+        }
+
+        .timeline-date {
+            display: inline-block;
+            padding: 0.4rem 1rem;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: var(--white);
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            margin-bottom: 1rem;
+            box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
+            letter-spacing: 0.3px;
+        }
+
+        .timeline-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 0.5rem;
+        }
+
+        .timeline-company {
+            font-size: 1rem;
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+        }
+
+        /* Skills */
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+
+        .skill-category {
+            background: var(--white);
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: var(--shadow-md);
+        }
+
+        .skill-category h3 {
+            margin-bottom: 1.5rem;
+            color: var(--primary-color);
+            font-size: 1.3rem;
+        }
+
+        .skill-item {
+            margin-bottom: 1.5rem;
+        }
+
+        .skill-name {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+
+        .skill-name-text {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .skill-icon {
+            width: 20px;
+            height: 20px;
+            object-fit: contain;
+        }
+
+        .skill-bar {
+            height: 10px;
+            background: #e2e8f0;
+            border-radius: 5px;
+            overflow: hidden;
+        }
+
+        .skill-progress {
+            height: 100%;
+            background: var(--gradient-2);
+            border-radius: 5px;
+            transition: width 1s ease;
+            width: 0;
+        }
+
+        .skill-item.visible .skill-progress {
+            width: var(--progress);
+        }
+
+        /* Proyectos */
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .project-card {
+            background: var(--white);
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: var(--shadow-md);
+            transition: all 0.3s ease;
+        }
+
+        .project-card:hover {
+            transform: translateY(-10px);
+            box-shadow: var(--shadow-xl);
+        }
+
+        .project-image {
+            width: 100%;
+            height: 200px;
+            background: var(--gradient-1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            color: var(--white);
+        }
+
+        .project-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .project-content {
+            padding: 1.5rem;
+        }
+
+        .project-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .project-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        .tag {
+            background: var(--gradient-2);
+            color: var(--white);
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+        }
+
+        /* Contacto */
+        .contact-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            align-items: start;
+        }
+
+        .contact-info {
+            background: var(--white);
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: var(--shadow-md);
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            gap: 1rem;
+        }
+
+        .contact-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: var(--gradient-2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--white);
+            font-size: 1.5rem;
+        }
+
+        .contact-form {
+            background: var(--white);
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: var(--shadow-md);
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: var(--text-dark);
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 0.8rem;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            font-family: inherit;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--primary-color);
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 120px;
+        }
+
+        /* Footer */
+        footer {
+            background: var(--dark-bg);
+            color: var(--white);
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .social-links a {
+            color: var(--white);
+            font-size: 1.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .social-links a:hover {
+            color: var(--accent-color);
+            transform: translateY(-3px);
+        }
+
+        /* Scroll to top button */
+        .scroll-top {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            width: 50px;
+            height: 50px;
+            background: var(--gradient-2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--white);
+            font-size: 1.5rem;
+            cursor: pointer;
+            opacity: 0;
+            pointer-events: none;
+            transition: all 0.3s ease;
+            box-shadow: var(--shadow-lg);
+        }
+
+        .scroll-top.visible {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .scroll-top:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-xl);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .hero h2 {
+                font-size: 1.5rem;
+            }
+
+            nav ul {
+                gap: 1rem;
+            }
+
+            .about-content,
+            .contact-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .btn-secondary {
+                margin-left: 0;
+                margin-top: 1rem;
+            }
+
+            .section-title {
+                font-size: 2rem;
+            }
+        }
+
+        /* Animaciones adicionales */
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.05);
+            }
+        }
+
+        .animate-pulse {
+            animation: pulse 2s infinite;
+        }
+    </style>
+</head>
+<body>
+    <!-- Video de fondo -->
+    <div class="video-bg">
+        <video autoplay loop muted playsinline>
+            <source src="Age-of-Beyond.mp4" type="video/mp4">
+        </video>
+    </div>
+
+    <!-- Fondo animado -->
+    <div class="animated-bg"></div>
+
+    <!-- Header -->
+    <header id="header">
+        <nav>
+            <div class="logo"> JM | </div>
+            <ul>
+                <li><a href="#inicio" data-lang-es="Inicio" data-lang-en="Home">Inicio</a></li>
+                <li><a href="#sobre-mi" data-lang-es="Perfil" data-lang-en="Profile">Perfil</a></li>
+                <li><a href="#experiencia" data-lang-es="Experiencia" data-lang-en="Experience">Experiencia</a></li>
+                <li><a href="#educacion" data-lang-es="Formación" data-lang-en="Education">Formación</a></li>
+                <li><a href="#skills" data-lang-es="Habilidades" data-lang-en="Skills">Habilidades</a></li>
+                <li><a href="#proyectos" data-lang-es="Proyectos" data-lang-en="Projects">Proyectos</a></li>
+                <li><a href="#contacto" data-lang-es="Contacto" data-lang-en="Contact">Contacto</a></li>
+            </ul>
+            <button class="lang-switch" onclick="toggleLanguage()">
+                <span id="lang-icon">🇪🇸</span>
+                <span id="lang-text">ES</span>
+            </button>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section id="inicio" class="hero">
+        <div class="hero-content">
+            <h1>José Murillo </h1>
+            <h2 data-lang-es="Ingeniero Electrónico & IA   | Docente Universitario" data-lang-en="Electronic Engineer & AI | University Professor">Ingeniero Electrónico & IA   | Docente Universitario</h2>
+            <p data-lang-es="Especializado en desarrollo y despliegue de soluciones de Inteligencia Artificial, con experiencia en I+D+i, automatización industrial y docencia técnica" data-lang-en="Specialized in development and deployment of Artificial Intelligence solutions, with experience in R&D&i, industrial automation and technical teaching">Especializado en desarrollo y despliegue de soluciones de Inteligencia Artificial, con experiencia en I+D+i, automatización industrial y docencia técnica</p>
+            <div>
+                <a href="#contacto" class="btn btn-primary" data-lang-es="Contáctame" data-lang-en="Contact Me">Contáctame</a>
+                <a href="#proyectos" class="btn btn-secondary" data-lang-es="Ver Proyectos" data-lang-en="View Projects">Ver Proyectos</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Sobre Mí -->
+    <section id="sobre-mi">
+        <h2 class="section-title" data-lang-es="Perfil profesional" data-lang-en="Professional profile">Perfil Profesional</h2>
+        <div class="card">
+            <div class="about-content">
+                <div class="profile-image"><img src="pacman17.jpg" alt="Foto de Perfil"></div>
+                <div>
+                    <p style="margin-bottom: 1rem;" data-lang-es="Ingeniero Electrónico Industrial con Máster en Inteligencia Artificial Avanzada y Aplicada. Experiencia en proyectos de I+D+i aplicados a Machine Learning, Deep Learning, Blockchain y Cloud Computing, tanto en entornos académicos como industriales." data-lang-en="Industrial Electronic Engineer with Master's in Advanced and Applied Artificial Intelligence. Experience in R&D&i projects applied to Machine Learning, Deep Learning, Blockchain and Cloud Computing, in both academic and industrial environments.">Ingeniero Electrónico Industrial con Máster en Inteligencia Artificial Avanzada y Aplicada. Experiencia en proyectos de I+D+i aplicados a Machine Learning, Deep Learning, Blockchain y Cloud Computing, tanto en entornos académicos como industriales.</p>
+                    <p style="margin-bottom: 1rem;" data-lang-es="Especializado en el diseño, entrenamiento y despliegue de modelos de IA, así como en la integración de soluciones en ecosistemas cloud. Con sólida experiencia en docencia universitaria, liderazgo de proyectos, digitalización y automatización de procesos industriales." data-lang-en="Specialized in design, training and deployment of AI models, as well as integration of solutions in cloud ecosystems. With solid experience in university teaching, project leadership, digitalization and automation of industrial processes.">Especializado en el diseño, entrenamiento y despliegue de modelos de IA, así como en la integración de soluciones en ecosistemas cloud. Con sólida experiencia en docencia universitaria, liderazgo de proyectos, digitalización y automatización de procesos industriales.</p>
+                    <p data-lang-es="Apasionado por la innovación tecnológica y el aprendizaje continuo, con capacidad para trabajar en proyectos multidisciplinares y habilidad demostrada para comunicar conceptos técnicos complejos en entornos académicos y profesionales." data-lang-en="Passionate about technological innovation and continuous learning, with ability to work on multidisciplinary projects and demonstrated skill in communicating complex technical concepts in academic and professional environments.">Apasionado por la innovación tecnológica y el aprendizaje continuo, con capacidad para trabajar en proyectos multidisciplinares y habilidad demostrada para comunicar conceptos técnicos complejos en entornos académicos y profesionales.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Experiencia -->
+    <section id="experiencia">
+        <h2 class="section-title" data-lang-es="Experiencia Profesional" data-lang-en="Professional Experience">Experiencia Profesional</h2>
+        <div class="card">
+            <div class="timeline-item">
+                <span class="timeline-date" data-lang-es="Julio 2022 - Presente" data-lang-en="July 2022 - Present">Julio 2022 - Presente</span>
+                <div class="timeline-title" data-lang-es="Personal Docente e Investigador (PDI)" data-lang-en="Teaching and Research Staff (PDI)">Personal Docente e Investigador (PDI)</div>
+                <div class="timeline-company">Universidad Internacional de Valencia (VIU)</div>
+                <p style="color: var(--text-light);" data-lang-es="Docente en Grado de Ingeniería Informática y Másteres de Robótica, Industria 4.0 e Inteligencia Artificial." data-lang-en="Professor in Computer Engineering Degree and Master's in Robotics, Industry 4.0 and Artificial Intelligence.">Docente en Grado de Ingeniería Informática y Másteres de Robótica, Industria 4.0 e Inteligencia Artificial.</p>
+                <p style="color: var(--text-light);" data-lang-es="Imparto las siguientes asignaturas:" data-lang-en="I teach the following subjects:">Imparto las siguientes asignaturas:</p>
+                <ul style="color: var(--text-light); margin-left: 1.5rem; margin-top: 0.5rem;">
+                    <li data-lang-es="Aprendizaje Automático (ML/DL)" data-lang-en="Machine Learning (ML/DL)">Aprendizaje Automático (ML/DL)</li>
+                    <li data-lang-es="Estrategias Algorítmicas" data-lang-en="Algorithmic Strategies">Estrategias Algorítmicas</li>
+                    <li data-lang-es="BigData & Cloud Computing" data-lang-en="BigData & Cloud Computing">BigData & Cloud Computing</li>
+                    <li data-lang-es="Conectividad Industrial" data-lang-en="Industrial Connectivity">Conectividad Industrial</li>
+                    <li data-lang-es="Dirección de Trabajos Final de Título" data-lang-en="Final Degree Project Supervision">Dirección de Trabajos Final de Título</li>
+                    <li data-lang-es="Elaboración de contenidos técnicos normativa ANECA" data-lang-en="Development of technical content ANECA standards">Elaboración de contenidos técnicos normativa ANECA</li>
+                </ul>
+            </div>
+
+            <div class="timeline-item">
+                <span class="timeline-date" data-lang-es="Junio 2022 - Julio 2023" data-lang-en="June 2022 - July 2023">Junio 2022 - Julio 2023</span>
+                <div class="timeline-title" data-lang-es="Ingeniero de Digitalización" data-lang-en="Digitalization Engineer">Ingeniero de Digitalización</div>
+                <div class="timeline-company">Hospital Provincial de Castellón (GVA)</div>
+                <p style="color: var(--text-light);" data-lang-es="Digitalización y seguridad de datos hospitalarios, optimizando procesos críticos. Implementación de instalaciones de última generación como cámara hiperbárica. Mejora de redes de comunicación para mayor eficiencia operativa. Mantenimiento y monitoreo de sistemas, minimizando interrupciones en el servicio." data-lang-en="Digitalization and security of hospital data, optimizing critical processes. Implementation of state-of-the-art installations such as hyperbaric chamber. Improvement of communication networks for greater operational efficiency. Systems maintenance and monitoring, minimizing service interruptions.">Digitalización y seguridad de datos hospitalarios, optimizando procesos críticos. Implementación de instalaciones de última generación como cámara hiperbárica. Mejora de redes de comunicación para mayor eficiencia operativa. Mantenimiento y monitoreo de sistemas, minimizando interrupciones en el servicio.</p>
+            </div>
+
+            <div class="timeline-item">
+                <span class="timeline-date" data-lang-es="Septiembre 2021 - Junio 2022" data-lang-en="September 2021 - June 2022">Septiembre 2021 - Junio 2022</span>
+                <div class="timeline-title" data-lang-es="Ingeniero de I+D+i en Inteligencia Artificial" data-lang-en="R&D&i Engineer in Artificial Intelligence">Ingeniero de I+D+i en Inteligencia Artificial</div>
+                <div class="timeline-company">Instituto Tecnológico de la Energía (ITE) - Valencia</div>
+                <p style="color: var(--text-light);" data-lang-es="Desarrollo de proyectos de investigación aplicada en IA. Programación con C, C++ y Python para soluciones avanzadas. Desarrollo de red blockchain y smart contracts. Despliegue de servicios en AWS. Preparación y entrenamiento de modelos de Machine Learning y Deep Learning. Caracterización de gemelos digitales para simulación industrial." data-lang-en="Development of applied AI research projects. Programming with C, C++ and Python for advanced solutions. Blockchain network and smart contracts development. AWS service deployment. Machine Learning and Deep Learning model preparation and training. Digital twins characterization for industrial simulation.">Desarrollo de proyectos de investigación aplicada en IA. Programación con C, C++ y Python para soluciones avanzadas. Desarrollo de red blockchain y smart contracts. Despliegue de servicios en AWS. Preparación y entrenamiento de modelos de Machine Learning y Deep Learning. Caracterización de gemelos digitales para simulación industrial.</p>
+            </div>
+
+            <div class="timeline-item">
+                <span class="timeline-date" data-lang-es="Agosto 2019 - Septiembre 2021" data-lang-en="August 2019 - September 2021">Agosto 2019 - Septiembre 2021</span>
+                <div class="timeline-title" data-lang-es="Programador PLC - Líder de Proyecto" data-lang-en="PLC Programmer - Project Leader">Programador PLC - Líder de Proyecto</div>
+                <div class="timeline-company">CMSA S.A. & GB MUNDIPACK S.L.</div>
+                <p style="color: var(--text-light);" data-lang-es="Dirección de proyectos y organización de personal técnico. Programación de PLC y HMI (Delta ISPSoft, Allen Bradley RSLogix, Schneider Somachine). Puesta en marcha de proyectos y modificaciones en planta. Automatización de máquinas de packing, paletizado, flejadoras y sistemas de transporte en el sector de alimentación." data-lang-en="Project management and technical staff organization. PLC and HMI programming (Delta ISPSoft, Allen Bradley RSLogix, Schneider Somachine). Project commissioning and plant modifications. Automation of packing machines, palletizing, strapping machines and transport systems in the food sector.">Dirección de proyectos y organización de personal técnico. Programación de PLC y HMI (Delta ISPSoft, Allen Bradley RSLogix, Schneider Somachine). Puesta en marcha de proyectos y modificaciones en planta. Automatización de máquinas de packing, paletizado, flejadoras y sistemas de transporte en el sector de alimentación.</p>
+            </div>
+
+            <div class="timeline-item">
+                <span class="timeline-date" data-lang-es="Abril 2018 - Julio 2019" data-lang-en="April 2018 - July 2019">Abril 2018 - Julio 2019</span>
+                <div class="timeline-title" data-lang-es="Programador PLC" data-lang-en="PLC Programmer">Programador PLC</div>
+                <div class="timeline-company">ICEMI S.L. (Proveedor FORD España)</div>
+                <p style="color: var(--text-light);" data-lang-es="Programación de PLC Allen Bradley con software RSLogix. Diseño de pantallas HMI con FactoryTalk View. Revisión y verificación de esquemas EPLAN. Puesta en marcha de sistemas de automatización industrial y modificaciones en líneas de producción automotriz." data-lang-en="Allen Bradley PLC programming with RSLogix software. HMI screen design with FactoryTalk View. EPLAN schematic review and verification. Industrial automation system commissioning and modifications in automotive production lines.">Programación de PLC Allen Bradley con software RSLogix. Diseño de pantallas HMI con FactoryTalk View. Revisión y verificación de esquemas EPLAN. Puesta en marcha de sistemas de automatización industrial y modificaciones en líneas de producción automotriz.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Educación -->
+    <section id="educacion">
+        <h2 class="section-title" data-lang-es="Formación académica" data-lang-en="Academic education">Formación Académica</h2>
+        <div class="card">
+
+            <div class="timeline-item">
+                <div class="timeline-date">Universidad de Valencia</div>
+                <div class="timeline-title" data-lang-es="Grado en Ingeniería Electrónica Industrial" data-lang-en="Degree in Industrial Electronic Engineering">Grado en Ingeniería Electrónica Industrial</div>
+                <p style="color: var(--text-light);" data-lang-es="Formación integral en electrónica, automatización industrial, control de procesos, programación de sistemas embebidos y diseño de sistemas electrónicos para aplicaciones industriales." data-lang-en="Comprehensive training in electronics, industrial automation, process control, embedded systems programming and electronic systems design for industrial applications.">Formación integral en electrónica, automatización industrial, control de procesos, programación de sistemas embebidos y diseño de sistemas electrónicos para aplicaciones industriales.</p>
+            </div>
+          
+            <div class="timeline-item">
+                <div class="timeline-date">Universidad de Valencia</div>
+                <div class="timeline-title" data-lang-es="Máster en Inteligencia Artificial Avanzada y Aplicada" data-lang-en="Master's in Advanced and Applied Artificial Intelligence">Máster en Inteligencia Artificial Avanzada y Aplicada</div>
+                <p style="color: var(--text-light);" data-lang-es="Especialización avanzada en Machine Learning, Deep Learning, Computer Vision, NLP y despliegue de modelos de IA en producción. Formación en arquitecturas neuronales, optimización de modelos y ética en IA." data-lang-en="Advanced specialization in Machine Learning, Deep Learning, Computer Vision, NLP and deployment of AI models in production. Training in neural architectures, model optimization and ethics in AI.">Especialización avanzada en Machine Learning, Deep Learning, Computer Vision, NLP y despliegue de modelos de IA en producción. Formación en arquitecturas neuronales, optimización de modelos y ética en IA.</p>
+            </div>
+          
+            <div class="timeline-item">
+                <div class="timeline-date">Universidad de Valencia</div>
+                <div class="timeline-title" data-lang-es="Máster en Profesor de Educación Secundaria" data-lang-en="Master's in Secondary Education Teaching">Máster en Profesor de Educación Secundaria</div>
+                <p style="color: var(--text-light);" data-lang-es="Formación pedagógica para la docencia en especialidades técnicas. Metodologías didácticas, evaluación del aprendizaje y diseño curricular en entornos educativos." data-lang-en="Pedagogical training for teaching in technical specialties. Didactic methodologies, learning assessment and curriculum design in educational environments.">Formación pedagógica para la docencia en especialidades técnicas. Metodologías didácticas, evaluación del aprendizaje y diseño curricular en entornos educativos.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Skills -->
+    <section id="skills">
+        <h2 class="section-title" data-lang-es="Habilidades" data-lang-en="Skills">Habilidades</h2>
+        <div class="skills-grid">
+            <div class="skill-category">
+                <h3 data-lang-es="IA & Machine Learning" data-lang-en="AI & Machine Learning">IA & Machine Learning</h3>
+                <div class="skill-item" data-progress="90">
+                    <div class="skill-name">
+                        <div class="skill-name-text">
+                            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg" class="skill-icon" alt="Python">
+                            <span>Python</span>
+                        </div>
+                        <span>90%</span>
+                    </div>
+                    <div class="skill-bar">
+                        <div class="skill-progress" style="--progress: 90%"></div>
+                    </div>
+                </div>
+                <div class="skill-item" data-progress="85">
+                    <div class="skill-name">
+                        <div class="skill-name-text">
+                            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/tensorflow/tensorflow-original.svg" class="skill-icon" alt="TensorFlow">
+                            <span>TensorFlow & PyTorch</span>
+                        </div>
+                        <span>85%</span>
+                    </div>
+                    <div class="skill-bar">
+                        <div class="skill-progress" style="--progress: 85%"></div>
+                    </div>
+                </div>
+                <div class="skill-item" data-progress="85">
+                    <div class="skill-name">
+                        <div class="skill-name-text">
+                            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/scikitlearn/scikitlearn-original.svg" class="skill-icon" alt="Scikit">
+                            <span>Scikit-Learn</span>
+                        </div>
+                        <span>85%</span>
+                    </div>
+                    <div class="skill-bar">
+                        <div class="skill-progress" style="--progress: 85%"></div>
+                    </div>
+                </div>
+                <div class="skill-item" data-progress="80">
+                    <div class="skill-name">
+                        <div class="skill-name-text">
+                            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/numpy/numpy-original.svg" class="skill-icon" alt="ML">
+                            <span>MLflow & DVC</span>
+                        </div>
+                        <span>80%</span>
+                    </div>
+                    <div class="skill-bar">
+                        <div class="skill-progress" style="--progress: 80%"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="skill-category">
+                <h3 data-lang-es="Data Science & Analytics" data-lang-en="Data Science & Analytics">Data Science & Analytics</h3>
+                <div class="skill-item" data-progress="90">
+                    <div class="skill-name">
+                        <div class="skill-name-text">
+                            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/pandas/pandas-original.svg" class="skill-icon" alt="Pandas">
+                            <span>Pandas & NumPy</span>
+                        </div>
+                        <span>90%</span>
+                    </div>
+                    <div class="skill-bar">
+                        <div class="skill-progress" style="--progress: 90%"></div>
+                    </div>
+                </div>
+                <div class="skill-item" data-progress="85">
+                    <div class="skill-name">
+                        <div class="skill-name-text">
+                            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/jupyter/jupyter-original.svg" class="skill-icon" alt="Jupyter">
+                            <span>Jupyter & Data Pipelines</span>
+                        </div>
+                        <span>85%</span>
+                    </div>
+                    <div class="skill-bar">
+                        <div class="skill-progress" style="--progress: 85%"></div>
+                    </div>
+                </div>
+                <div class="skill-item" data-progress="80">
+                    <div class="skill-name">
+                        <div class="skill-name-text">
+                            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mysql/mysql-original.svg" class="skill-icon" alt="SQL">
+                            <span>SQL & MySQL</span>
+                        </div>
+                        <span>80%</span>
+                    </div>
+                    <div class="skill-bar">
+                        <div class="skill-progress" style="--progress: 80%"></div>
+                    </div>
+                </div>
+                <div class="skill-item" data-progress="75">
+                    <div class="skill-name">
+                        <div class="skill-name-text">
+                            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mongodb/mongodb-original.svg" class="skill-icon" alt="MongoDB">
+                            <span>MongoDB</span>
+                        </div>
+                        <span>75%</span>
+                    </div>
+                    <div class="skill-bar">
+                        <div class="skill-progress" style="--progress: 75%"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="skill-category">
+                <h3 data-lang-es="Automatización Industrial" data-lang-en="Industrial Automation">Automatización Industrial</h3>
+                <div class="skill-item" data-progress="90">
+                    <div class="skill-name">
+                        <div class="skill-name-text">
+                            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/raspberrypi/raspberrypi-original.svg" class="skill-icon" alt="PLC">
+                            <span>Allen Bradley PLC</span>
+                        </div>
+                        <span>90%</span>
+                    </div>
+                    <div class="skill-bar">
+                        <div class="skill-progress" style="--progress: 90%"></div>
+                    </div>
+                </div>
+                <div class="skill-item" data-progress="85">
+                    <div class="skill-name">
+                        <div class="skill-name-text">
+                            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/arduino/arduino-original.svg" class="skill-icon" alt="Industrial">
+                            <span>Siemens & Schneider</span>
+                        </div>
+                        <span>85%</span>
+                    </div>
+                    <div class="skill-bar">
+                        <div class="skill-progress" style="--progress: 85%"></div>
+                    </div>
+                </div>
+                <div class="skill-item" data-progress="85">
+                    <div class="skill-name">
+                        <div class="skill-name-text">
+                            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/figma/figma-original.svg" class="skill-icon" alt="HMI">
+                            <span>HMI Design</span>
+                        </div>
+                        <span>85%</span>
+                    </div>
+                    <div class="skill-bar">
+                        <div class="skill-progress" style="--progress: 85%"></div>
+                    </div>
+                </div>
+                <div class="skill-item" data-progress="80">
+                    <div class="skill-name">
+                        <div class="skill-name-text">
+                            <svg class="skill-icon" viewBox="0 0 24 24" fill="currentColor" alt="EPLAN">
+                                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z" opacity="0.3"/>
+                                <path d="M3 3h18v18H3V3zm2 2v14h14V5H5zm5 6.5c0-.28.22-.5.5-.5h3c.28 0 .5.22.5.5v3c0 .28-.22.5-.5.5h-3c-.28 0-.5-.22-.5-.5v-3zm-3-4c0-.28.22-.5.5-.5h11c.28 0 .5.22.5.5s-.22.5-.5.5h-11c-.28 0-.5-.22-.5-.5zm0 8c0-.28.22-.5.5-.5h11c.28 0 .5.22.5.5s-.22.5-.5.5h-11c-.28 0-.5-.22-.5-.5z"/>
+                            </svg>
+                            <span>EPLAN & CAD</span>
+                        </div>
+                        <span>80%</span>
+                    </div>
+                    <div class="skill-bar">
+                        <div class="skill-progress" style="--progress: 80%"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="skill-category">
+                <h3 data-lang-es="Cloud & DevOps" data-lang-en="Cloud & DevOps">Cloud & DevOps</h3>
+                <div class="skill-item" data-progress="85">
+                    <div class="skill-name">
+                        <div class="skill-name-text">
+                            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/amazonwebservices/amazonwebservices-plain-wordmark.svg" class="skill-icon" alt="AWS">
+                            <span>AWS (ML Deploy)</span>
+                        </div>
+                        <span>85%</span>
+                    </div>
+                    <div class="skill-bar">
+                        <div class="skill-progress" style="--progress: 85%"></div>
+                    </div>
+                </div>
+                <div class="skill-item" data-progress="80">
+                    <div class="skill-name">
+                        <div class="skill-name-text">
+                            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/docker/docker-original.svg" class="skill-icon" alt="Docker">
+                            <span>Docker & Containers</span>
+                        </div>
+                        <span>80%</span>
+                    </div>
+                    <div class="skill-bar">
+                        <div class="skill-progress" style="--progress: 80%"></div>
+                    </div>
+                </div>
+                <div class="skill-item" data-progress="85">
+                    <div class="skill-name">
+                        <div class="skill-name-text">
+                            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/git/git-original.svg" class="skill-icon" alt="Git">
+                            <span>Git/GitLab CI/CD</span>
+                        </div>
+                        <span>85%</span>
+                    </div>
+                    <div class="skill-bar">
+                        <div class="skill-progress" style="--progress: 85%"></div>
+                    </div>
+                </div>
+                <div class="skill-item" data-progress="75">
+                    <div class="skill-name">
+                        <div class="skill-name-text">
+                            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/linux/linux-original.svg" class="skill-icon" alt="Linux">
+                            <span>Linux Server Admin</span>
+                        </div>
+                        <span>75%</span>
+                    </div>
+                    <div class="skill-bar">
+                        <div class="skill-progress" style="--progress: 75%"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Proyectos -->
+    <section id="proyectos">
+        <h2 class="section-title" data-lang-es="Proyectos Destacados" data-lang-en="Featured Projects">Proyectos Destacados</h2>
+        <div class="projects-grid">
+            <div class="project-card">
+                <div class="project-image"><img src="rag.png" alt="Sistema RAG para Análisis de Documentación"></div>
+                <div class="project-content">
+                    <h3 class="project-title" data-lang-es="Sistema RAG para Análisis de Documentación" data-lang-en="RAG System for Document Analysis">Sistema RAG para Análisis de Documentación</h3>
+                    <p style="color: var(--text-light); margin-bottom: 1rem;" data-lang-es="Desarrollo de sistema RAG (Retrieval-Augmented Generation) para análisis inteligente de documentación técnica con procesamiento de lenguaje natural." data-lang-en="Development of RAG (Retrieval-Augmented Generation) system for intelligent analysis of technical documentation with natural language processing.">Desarrollo de sistema RAG (Retrieval-Augmented Generation) para análisis inteligente de documentación técnica con procesamiento de lenguaje natural.</p>
+                    <div class="project-tags">
+                        <span class="tag">Python</span>
+                        <span class="tag">LangChain</span>
+                        <span class="tag">OpenAI</span>
+                        <span class="tag">Vector DB</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="project-card">
+                <div class="project-image"><img src="blockchain.png" alt="Red Blockchain & Smart Contracts"></div>
+                <div class="project-content">
+                    <h3 class="project-title" data-lang-es="Red Blockchain & Smart Contracts" data-lang-en="Blockchain Network & Smart Contracts">Red Blockchain & Smart Contracts</h3>
+                    <p style="color: var(--text-light); margin-bottom: 1rem;" data-lang-es="Desarrollo de red blockchain privada y smart contracts para trazabilidad en sector energético. Implementación de consenso y tokenización." data-lang-en="Development of private blockchain network and smart contracts for traceability in the energy sector. Consensus implementation and tokenization.">Desarrollo de red blockchain privada y smart contracts para trazabilidad en sector energético. Implementación de consenso y tokenización.</p>
+                    <div class="project-tags">
+                        <span class="tag">Blockchain</span>
+                        <span class="tag">Solidity</span>
+                        <span class="tag">Python</span>
+                        <span class="tag">Web3</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="project-card">
+                <div class="project-image"><img src="digital_twins.png" alt="Gemelos Digitales para Industria 4.0"></div>
+                <div class="project-content">
+                    <h3 class="project-title" data-lang-es="Gemelos Digitales para Industria 4.0" data-lang-en="Digital Twins for Industry 4.0">Gemelos Digitales para Industria 4.0</h3>
+                    <p style="color: var(--text-light); margin-bottom: 1rem;" data-lang-es="Caracterización y desarrollo de gemelos digitales para simulación de procesos industriales. Integración de datos IoT en tiempo real." data-lang-en="Characterization and development of digital twins for simulation of industrial processes. Real-time IoT data integration.">Caracterización y desarrollo de gemelos digitales para simulación de procesos industriales. Integración de datos IoT en tiempo real.</p>
+                    <div class="project-tags">
+                        <span class="tag">Python</span>
+                        <span class="tag">IoT</span>
+                        <span class="tag">ML</span>
+                        <span class="tag" data-lang-es="Simulación" data-lang-en="Simulation">Simulación</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="project-card">
+                <div class="project-image"><img src="pipeline_ml.png" alt="Pipeline ML para Predicción Industrial"></div>
+                <div class="project-content">
+                    <h3 class="project-title" data-lang-es="Pipeline ML para Predicción Industrial" data-lang-en="ML Pipeline for Industrial Prediction">Pipeline ML para Predicción Industrial</h3>
+                    <p style="color: var(--text-light); margin-bottom: 1rem;" data-lang-es="Sistema completo de ML para mantenimiento predictivo en líneas de producción. Incluye ingesta, procesamiento y despliegue en AWS." data-lang-en="Complete ML system for predictive maintenance in production lines. Includes ingestion, processing and deployment on AWS.">Sistema completo de ML para mantenimiento predictivo en líneas de producción. Incluye ingesta, procesamiento y despliegue en AWS.</p>
+                    <div class="project-tags">
+                        <span class="tag">Python</span>
+                        <span class="tag">MLflow</span>
+                        <span class="tag">AWS</span>
+                        <span class="tag">Docker</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="project-card">
+                <div class="project-image"><img src="vision.png" alt="Sistema de Visión Artificial para QA"></div>
+                <div class="project-content">
+                    <h3 class="project-title" data-lang-es="Sistema de Visión Artificial para QA" data-lang-en="Computer Vision System for QA">Sistema de Visión Artificial para QA</h3>
+                    <p style="color: var(--text-light); margin-bottom: 1rem;" data-lang-es="Desarrollo de sistema de visión por computadora para control de calidad automático en líneas de producción alimentaria." data-lang-en="Development of computer vision system for automatic quality control in food production lines.">Desarrollo de sistema de visión por computadora para control de calidad automático en líneas de producción alimentaria.</p>
+                    <div class="project-tags">
+                        <span class="tag">PyTorch</span>
+                        <span class="tag">OpenCV</span>
+                        <span class="tag">YOLO</span>
+                        <span class="tag">Edge AI</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="project-card">
+                <div class="project-image"><img src="scada.png" alt="Sistema SCADA de Automatización"></div>
+                <div class="project-content">
+                    <h3 class="project-title" data-lang-es="Sistema SCADA de Automatización" data-lang-en="SCADA Automation System">Sistema SCADA de Automatización</h3>
+                    <p style="color: var(--text-light); margin-bottom: 1rem;" data-lang-es="Diseño e implementación de sistema SCADA para control y monitorización de procesos industriales en sector automotriz." data-lang-en="Design and implementation of SCADA system for control and monitoring of industrial processes in the automotive sector.">Diseño e implementación de sistema SCADA para control y monitorización de procesos industriales en sector automotriz.</p>
+                    <div class="project-tags">
+                        <span class="tag">Allen Bradley</span>
+                        <span class="tag">HMI</span>
+                        <span class="tag">SCADA</span>
+                        <span class="tag">OPC UA</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contacto -->
+    <section id="contacto">
+        <h2 class="section-title" data-lang-es="Contacto" data-lang-en="Contact">Contacto</h2>
+        <div class="card" style="text-align: center; max-width: 600px; margin: 0 auto;">
+            <div style="display: flex; justify-content: center; align-items: center; margin: 2rem 0;">
+                <div style="width: 100px; height: 100px; border-radius: 50%; background: #0077B5; display: flex; align-items: center; justify-content: center; font-size: 3rem; color: var(--white); box-shadow: var(--shadow-lg); font-weight: bold; font-family: Arial, sans-serif;">
+                    in
+                </div>
+            </div>
+            <p style="color: var(--text-light); margin-bottom: 2rem; font-size: 1.1rem;" data-lang-es="Para consultas profesionales, colaboraciones o más información, contáctame a través de mi perfil de LinkedIn." data-lang-en="For professional inquiries, collaborations or more information, contact me through my LinkedIn profile.">Para consultas profesionales, colaboraciones o más información, contáctame a través de mi perfil de LinkedIn.</p>
+            <a href="https://www.linkedin.com/in/jos%C3%A9-murillo-91606a32b/" target="_blank" class="btn btn-primary" style="display: inline-flex; align-items: center; gap: 0.5rem;" data-lang-es="Visitar Perfil de LinkedIn" data-lang-en="Visit LinkedIn Profile">Visitar Perfil de LinkedIn</a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="social-links">
+            <a href="https://www.linkedin.com/in/jos%C3%A9-murillo-91606a32b/" target="_blank" title="LinkedIn" style="background: #0077B5; width: 50px; height: 50px; border-radius: 8px; display: inline-flex; align-items: center; justify-content: center; font-weight: bold; font-family: Arial, sans-serif;">in</a>
+        </div>
+        <p data-lang-es="&copy; 2026 José Murillo . Ingeniero de IA & electrónica. Todos los derechos reservados." data-lang-en="&copy; 2026 José Murillo Conesa. AI & electronic Engineer. All rights reserved.">&copy; 2026 José Murillo Conesa. Ingeniero de IA & Machine Learning. Todos los derechos reservados.</p>
+        <p style="margin-top: 0.5rem; font-size: 0.9rem; opacity: 0.8;" data-lang-es="🇪🇸 Español (Nativo) | 🇬🇧 Inglés (B2)" data-lang-en="🇪🇸 Spanish (Native) | 🇬🇧 English (B2)">🇪🇸 Español (Nativo) | 🇬🇧 Inglés (B2)</p>
+    </footer>
+
+    <!-- Scroll to top button -->
+    <div class="scroll-top" id="scrollTop">↑</div>
+
+    <script>
+        // Header scroll effect
+        const header = document.getElementById('header');
+        const scrollTop = document.getElementById('scrollTop');
+
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 100) {
+                header.classList.add('scrolled');
+                scrollTop.classList.add('visible');
+            } else {
+                header.classList.remove('scrolled');
+                scrollTop.classList.remove('visible');
+            }
+        });
+
+        // Smooth scrolling
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Scroll to top button
+        scrollTop.addEventListener('click', () => {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+
+        // Intersection Observer para animaciones
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, observerOptions);
+
+        // Observar todos los cards
+        document.querySelectorAll('.card, .skill-item, .project-card').forEach(card => {
+            observer.observe(card);
+        });
+
+        // Animación de las barras de progreso cuando entran en la vista
+        const skillObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const skillItems = entry.target.querySelectorAll('.skill-item');
+                    skillItems.forEach((item, index) => {
+                        setTimeout(() => {
+                            item.classList.add('visible');
+                        }, index * 100);
+                    });
+                    skillObserver.unobserve(entry.target);
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.skill-category').forEach(category => {
+            skillObserver.observe(category);
+        });
+
+        // Efecto parallax en el hero
+        window.addEventListener('scroll', () => {
+            const scrolled = window.pageYOffset;
+            const hero = document.querySelector('.hero');
+            if (hero) {
+                hero.style.transform = `translateY(${scrolled * 0.5}px)`;
+                hero.style.opacity = 1 - (scrolled / 700);
+            }
+        });
+
+        // Animación de typing para el título
+        const heroTitle = document.querySelector('.hero h1');
+        if (heroTitle) {
+            const text = heroTitle.textContent;
+            heroTitle.textContent = '';
+            let i = 0;
+            
+            const typeWriter = () => {
+                if (i < text.length) {
+                    heroTitle.textContent += text.charAt(i);
+                    i++;
+                    setTimeout(typeWriter, 100);
+                }
+            };
+            
+            setTimeout(typeWriter, 500);
+        }
+
+        // Contador animado para estadísticas (ejemplo)
+        function animateCounter(element, target, duration) {
+            let start = 0;
+            const increment = target / (duration / 16);
+            
+            const updateCounter = () => {
+                start += increment;
+                if (start < target) {
+                    element.textContent = Math.floor(start);
+                    requestAnimationFrame(updateCounter);
+                } else {
+                    element.textContent = target;
+                }
+            };
+            
+            updateCounter();
+        }
+
+        // Easter egg: Konami Code
+        let konamiCode = [];
+        const correctCode = ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight', 'b', 'a'];
+
+        document.addEventListener('keydown', (e) => {
+            konamiCode.push(e.key);
+            konamiCode = konamiCode.slice(-10);
+
+            if (konamiCode.join(',') === correctCode.join(',')) {
+                document.body.style.animation = 'gradientShift 2s ease infinite';
+                alert('🎉 ¡Código Konami activado! ¡Eres un verdadero gamer!');
+            }
+        });
+
+        // Cursor personalizado (opcional)
+        const cursor = document.createElement('div');
+        cursor.style.cssText = `
+            position: fixed;
+            width: 10px;
+            height: 10px;
+            background: var(--accent-color);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 9999;
+            transition: transform 0.15s ease;
+            display: none;
+        `;
+        document.body.appendChild(cursor);
+
+        document.addEventListener('mousemove', (e) => {
+            cursor.style.left = e.clientX + 'px';
+            cursor.style.top = e.clientY + 'px';
+            cursor.style.display = 'block';
+        });
+
+        document.addEventListener('mousedown', () => {
+            cursor.style.transform = 'scale(2)';
+        });
+
+        document.addEventListener('mouseup', () => {
+            cursor.style.transform = 'scale(1)';
+        });
+
+        // Sistema de traducción
+        let currentLang = localStorage.getItem('language') || 'es';
+
+        function toggleLanguage() {
+            currentLang = currentLang === 'es' ? 'en' : 'es';
+            localStorage.setItem('language', currentLang);
+            updateLanguage();
+        }
+
+        function updateLanguage() {
+            // Actualizar todos los elementos con atributos data-lang
+            document.querySelectorAll('[data-lang-es]').forEach(element => {
+                const text = currentLang === 'es' ? element.getAttribute('data-lang-es') : element.getAttribute('data-lang-en');
+                
+                // Para elementos que solo tienen texto (sin hijos complejos)
+                if (element.children.length === 0 || element.tagName === 'LI') {
+                    element.textContent = text;
+                } else {
+                    // Para elementos con estructura interna, usar innerHTML
+                    element.innerHTML = text;
+                }
+            });
+
+            // Actualizar botón de idioma
+            const langIcon = document.getElementById('lang-icon');
+            const langText = document.getElementById('lang-text');
+            if (currentLang === 'es') {
+                langIcon.textContent = '🇪🇸';
+                langText.textContent = 'ES';
+                document.documentElement.lang = 'es';
+            } else {
+                langIcon.textContent = '🇬🇧';
+                langText.textContent = 'EN';
+                document.documentElement.lang = 'en';
+            }
+        }
+
+        // Aplicar idioma al cargar la página
+        window.addEventListener('DOMContentLoaded', function() {
+            updateLanguage();
+        });
+
+        // Modo oscuro (toggle)
+        let darkMode = false;
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'd' && e.ctrlKey) {
+                e.preventDefault();
+                darkMode = !darkMode;
+                document.body.style.filter = darkMode ? 'invert(1) hue-rotate(180deg)' : 'none';
+            }
+        });
+
+        console.log('🤖 José Murillo - Automation & AI Engineer');
+        console.log('💡 Presiona Ctrl+D para alternar modo oscuro');
+    </script>
+</body>
+</html>
